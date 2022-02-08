@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wordle Genie</string>
+    <string name="button_go">NEXT</string>
+    <string name="button_reset">RESET</string>
+</resources>
