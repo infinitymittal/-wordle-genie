@@ -1,80 +1,115 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {/* TODO */}
-      </button>
-    );
-  }
+const WORD_LENGTH = 5
+const MAX_ATTEMPTS = 6
+
+class CharButton extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			value:0,
+			ch:props.ch
+		}
+	}
+	
+	handleClick() {
+		this.setState({value:(this.state.value+1)%3})
+	}
+	
+	setChar(newCh) {
+		this.state = {ch:newCh}
+	}
+
+	render() {
+		return (
+			<button className="char-button" 
+				onClick={()=>this.handleClick()}
+				style={{background:CharButton.backGroundColors[this.state.value], 
+					color:CharButton.textColors[this.state.value]}}>
+			  {this.state.ch}
+			</button>
+		)
+	}
+}
+CharButton.backGroundColors = ['black', 'yellow', 'Lime']
+CharButton.textColors = ['white', 'black', 'black']
+
+class AttemptRow extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {move:props.move}
+	}
+
+	render() {
+		const charButtons = [...Array(WORD_LENGTH).keys()].map(i=> 
+			<CharButton key = {i} ch={this.state.move.word[i].toUpperCase()}/>
+		)
+		return (
+		<div className="attempt-row">
+			{charButtons}
+			<button className="next-button" onClick={()=>this.props.onNextClick(this.props.rowId)}>
+			  NEXT
+			</button>			
+		</div>
+		)
+	}
 }
 
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />;
-  }
+class MainLayout extends React.Component {
+	constructor(props) {
+		super(props)
+		console.log(props)
+		this.rows = [...Array(MAX_ATTEMPTS).keys()].map(i=>
+				<AttemptRow key={i} rowId={i} 
+				move={MainLayout.rootMove}
+				onNextClick={this.handleNextClickMain(this)}
+		/>)
+	}
+	
+	handleNextClick(mainLayout, rowId) {
+		console.log(rowId)
+		//mainLayout.rows[rowId+1].setState({move:mainLayout.rows[rowId].props.move.bucketToMove[0]})
+	}
 
-  render() {
-    const status = 'Next player: X';
-
-    return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
+	handleNextClickMain(mainLayout) {
+		return rowId=>this.handleNextClick(mainLayout, rowId)
+	}
+	
+	render() {
+		return (this.rows)
+	}
 }
+MainLayout.rootMove = require("./bestresult.json")
+console.log(MainLayout.rootMove.word)
 
-class Game extends React.Component {
-  render() {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
-      </div>
-    );
-  }
+class Instructions extends React.Component {
+	render() {
+		return (
+		<div style={{ textAlign: "center", color: "black"}} >
+			This is a Wordle Solver for ALL words.
+			<br/>WIP. Not ready yet!!!!
+			<ol type="1">
+				<li>Enter the word given here in Wordle.</li>
+				<li>Change color of the alphabets below by tapping.</li>
+				<li>Match the colors to those given by Wordle.</li>
+				<li>Press NEXT to get the next word.</li>
+				<li>Repeat from Step 1 for next word.</li>
+			</ol>
+			You can start again by pressing RESET."
+		</div>
+		)
+	}
 }
 
 // ========================================
-
 ReactDOM.render(
-  <div>
-  <div style={{ textAlign: "center", color: "black"}} >
-  This is a Wordle Solver for ALL words.
-  <ol type="1">
-  <li>Enter the word given here in Wordle.</li>
-  <li>Change color of the alphabets below by tapping.</li>
-  <li>Match the colors to those given by Wordle.</li>
-  <li>Press NEXT to get the next word.</li>
-  <li>Repeat from Step 1 for next word.</li>
-  </ol>
-  You can start again by pressing RESET."
-  </div>
-  <Game />
-  </div>,
+  <React.StrictMode>
+	<div>
+		<Instructions />
+		<MainLayout/>
+	</div>
+  </React.StrictMode>,
   document.getElementById('root')
-);
+)
