@@ -62,6 +62,19 @@ class Game extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <div>
+  <div style={{ textAlign: "center", color: "black"}} >
+  This is a Wordle Solver for ALL words.
+  <ol type="1">
+  <li>Enter the word given here in Wordle.</li>
+  <li>Change color of the alphabets below by tapping.</li>
+  <li>Match the colors to those given by Wordle.</li>
+  <li>Press NEXT to get the next word.</li>
+  <li>Repeat from Step 1 for next word.</li>
+  </ol>
+  You can start again by pressing RESET."
+  </div>
+  <Game />
+  </div>,
   document.getElementById('root')
 );
