@@ -1,6 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure()
 
 const WORD_LENGTH = 5
 const MAX_ATTEMPTS = 6
@@ -54,17 +58,18 @@ class MainLayout extends React.Component {
 	}
 	
 	handleNextClick(rowId) {
-		if(rowId>=MAX_ATTEMPTS)
+		if(rowId>=MAX_ATTEMPTS-1) {
+			{toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})}
 			return
+		}
 		let bucket = 0
 		this.state.rowColors[rowId].forEach(color=> {
 			bucket=bucket*3
 			bucket+=color
 		})
 		const newMoves = this.state.moves
-		const type = typeof newMoves[rowId].bucketToMove
-		console.log(type.toString())
 		if(!(newMoves[rowId].bucketToMove.hasOwnProperty(bucket))) {
+			{toast.error("Your argument is invalid. Check the colors.", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})}
 			return
 		}
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
