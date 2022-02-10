@@ -20,14 +20,15 @@ class CharButton extends React.Component {
 	render() {
 		return (
 			<button className="char-button" 
-				onClick={()=>this.handleClick()}
-				style={{background:CharButton.backGroundColors[this.state.value], 
-					color:CharButton.textColors[this.state.value]}}>
+				onClick={this.props.onCharClick}
+				style={{background:CharButton.backGroundColors[this.props.color], 
+					color:CharButton.textColors[this.props.color]}}>
 			  {this.props.ch}
 			</button>
 		)
 	}
 }
+
 CharButton.backGroundColors = ['black', 'yellow', 'Lime']
 CharButton.textColors = ['white', 'black', 'black']
 
@@ -38,7 +39,11 @@ class AttemptRow extends React.Component {
 
 	render() {
 		const charButtons = [...Array(WORD_LENGTH).keys()].map(i=> 
-			<CharButton key = {i} ch={this.props.move.word[i].toUpperCase()}/>
+			<CharButton key = {i}
+				ch={this.props.move.word[i].toUpperCase()}
+				color={this.props.colors[i]}
+				onCharClick={() =>this.props.onCharClick(this.props.rowId, i)}
+			/>
 		)
 		return (
 		<div className="attempt-row">
@@ -56,25 +61,32 @@ class MainLayout extends React.Component {
 		super(props)
 		console.log(props)
 		this.state = {
-			colors: Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(0)),
+			rowColors: [...Array(MAX_ATTEMPTS).keys()].map(i=>Array(WORD_LENGTH).fill(0)),
 			moves: [...Array(MAX_ATTEMPTS).keys()].map(i=>MainLayout.rootMove)
 		}
 	}
 	
 	handleNextClick(mainLayout, rowId) {
-		console.log(rowId)
 		const bucket = 0
-		const newMoves = [...this.state.moves]
+		const newMoves = this.state.moves
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
 		this.setState({moves:newMoves})
+	}
+
+	handleCharClick(mainLayout, rowId, charId) {
+		const newRowColors = this.state.rowColors
+		newRowColors[rowId][charId] = (newRowColors[rowId][charId]+1)%3
+		this.setState({rowColors:newRowColors})
 	}
 
 	render() {
 		return ([...Array(MAX_ATTEMPTS).keys()].map(i=>
 				<AttemptRow key={i} rowId={i} 
-				move={this.state.moves[i]}
-				onNextClick={rowId=>this.handleNextClick(this, rowId)}
-		/>))
+					move={this.state.moves[i]}
+					colors={this.state.rowColors[i]}
+					onNextClick={(rowId)=>this.handleNextClick(this, rowId)}
+					onCharClick={(rowId,charId) =>this.handleCharClick(this, rowId, charId)}
+				/>))
 	}
 }
 
