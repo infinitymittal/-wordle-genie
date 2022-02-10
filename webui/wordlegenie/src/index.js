@@ -59,7 +59,7 @@ class MainLayout extends React.Component {
 	
 	handleNextClick(rowId) {
 		if(rowId>=MAX_ATTEMPTS-1) {
-			{toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})}
+			toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
 			return
 		}
 		let bucket = 0
@@ -69,7 +69,7 @@ class MainLayout extends React.Component {
 		})
 		const newMoves = this.state.moves
 		if(!(newMoves[rowId].bucketToMove.hasOwnProperty(bucket))) {
-			{toast.error("Your argument is invalid. Check the colors.", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})}
+			toast.error("Your argument is invalid. Check the colors.", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
 			return
 		}
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
