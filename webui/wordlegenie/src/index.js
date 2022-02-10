@@ -9,8 +9,7 @@ class CharButton extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			value:0,
-			ch:props.ch
+			value:0
 		}
 	}
 	
@@ -18,17 +17,13 @@ class CharButton extends React.Component {
 		this.setState({value:(this.state.value+1)%3})
 	}
 	
-	setChar(newCh) {
-		this.state = {ch:newCh}
-	}
-
 	render() {
 		return (
 			<button className="char-button" 
 				onClick={()=>this.handleClick()}
 				style={{background:CharButton.backGroundColors[this.state.value], 
 					color:CharButton.textColors[this.state.value]}}>
-			  {this.state.ch}
+			  {this.props.ch}
 			</button>
 		)
 	}
@@ -39,12 +34,11 @@ CharButton.textColors = ['white', 'black', 'black']
 class AttemptRow extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {move:props.move}
 	}
 
 	render() {
 		const charButtons = [...Array(WORD_LENGTH).keys()].map(i=> 
-			<CharButton key = {i} ch={this.state.move.word[i].toUpperCase()}/>
+			<CharButton key = {i} ch={this.props.move.word[i].toUpperCase()}/>
 		)
 		return (
 		<div className="attempt-row">
@@ -61,26 +55,29 @@ class MainLayout extends React.Component {
 	constructor(props) {
 		super(props)
 		console.log(props)
-		this.rows = [...Array(MAX_ATTEMPTS).keys()].map(i=>
-				<AttemptRow key={i} rowId={i} 
-				move={MainLayout.rootMove}
-				onNextClick={this.handleNextClickMain(this)}
-		/>)
+		this.state = {
+			colors: Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(0)),
+			moves: [...Array(MAX_ATTEMPTS).keys()].map(i=>MainLayout.rootMove)
+		}
 	}
 	
 	handleNextClick(mainLayout, rowId) {
 		console.log(rowId)
-		//mainLayout.rows[rowId+1].setState({move:mainLayout.rows[rowId].props.move.bucketToMove[0]})
+		const bucket = 0
+		const newMoves = [...this.state.moves]
+		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
+		this.setState({moves:newMoves})
 	}
 
-	handleNextClickMain(mainLayout) {
-		return rowId=>this.handleNextClick(mainLayout, rowId)
-	}
-	
 	render() {
-		return (this.rows)
+		return ([...Array(MAX_ATTEMPTS).keys()].map(i=>
+				<AttemptRow key={i} rowId={i} 
+				move={this.state.moves[i]}
+				onNextClick={rowId=>this.handleNextClick(this, rowId)}
+		/>))
 	}
 }
+
 MainLayout.rootMove = require("./bestresult.json")
 console.log(MainLayout.rootMove.word)
 
