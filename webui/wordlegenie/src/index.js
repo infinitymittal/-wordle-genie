@@ -66,17 +66,23 @@ class MainLayout extends React.Component {
 		}
 	}
 	
-	handleNextClick(mainLayout, rowId) {
-		const bucket = 0
+	handleNextClick(rowId) {
+		let bucket = 0
+		console.log(this.state.rowColors[rowId])
+		this.state.rowColors[rowId].forEach(color=> {
+			bucket=bucket*3
+			bucket+=color
+		})
+		console.log(bucket)
 		const newMoves = this.state.moves
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
-		this.setState({moves:newMoves})
+		this.setState({moves:newMoves, rowColors:this.state.rowColors})
 	}
 
-	handleCharClick(mainLayout, rowId, charId) {
+	handleCharClick(rowId, charId) {
 		const newRowColors = this.state.rowColors
 		newRowColors[rowId][charId] = (newRowColors[rowId][charId]+1)%3
-		this.setState({rowColors:newRowColors})
+		this.setState({rowColors:newRowColors, moves:this.state.moves})
 	}
 
 	render() {
@@ -84,8 +90,8 @@ class MainLayout extends React.Component {
 				<AttemptRow key={i} rowId={i} 
 					move={this.state.moves[i]}
 					colors={this.state.rowColors[i]}
-					onNextClick={(rowId)=>this.handleNextClick(this, rowId)}
-					onCharClick={(rowId,charId) =>this.handleCharClick(this, rowId, charId)}
+					onNextClick={(rowId)=>this.handleNextClick(rowId)}
+					onCharClick={(rowId,charId) =>this.handleCharClick(rowId, charId)}
 				/>))
 	}
 }
