@@ -6,17 +6,6 @@ const WORD_LENGTH = 5
 const MAX_ATTEMPTS = 6
 
 class CharButton extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			value:0
-		}
-	}
-	
-	handleClick() {
-		this.setState({value:(this.state.value+1)%3})
-	}
-	
 	render() {
 		return (
 			<button className="char-button" 
@@ -33,11 +22,9 @@ CharButton.backGroundColors = ['black', 'yellow', 'Lime']
 CharButton.textColors = ['white', 'black', 'black']
 
 class AttemptRow extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-
 	render() {
+		if(this.props.isHidden)
+			return null
 		const charButtons = [...Array(WORD_LENGTH).keys()].map(i=> 
 			<CharButton key = {i}
 				ch={this.props.move.word[i].toUpperCase()}
@@ -59,30 +46,33 @@ class AttemptRow extends React.Component {
 class MainLayout extends React.Component {
 	constructor(props) {
 		super(props)
-		console.log(props)
 		this.state = {
 			rowColors: [...Array(MAX_ATTEMPTS).keys()].map(i=>Array(WORD_LENGTH).fill(0)),
-			moves: [...Array(MAX_ATTEMPTS).keys()].map(i=>MainLayout.rootMove)
+			moves: [...Array(MAX_ATTEMPTS).keys()].map(i=>MainLayout.rootMove),
+			isRowHidden: [...Array(MAX_ATTEMPTS).keys()].map(i=> i>0)
 		}
 	}
 	
 	handleNextClick(rowId) {
+		if(rowId>=MAX_ATTEMPTS)
+			return
 		let bucket = 0
-		console.log(this.state.rowColors[rowId])
 		this.state.rowColors[rowId].forEach(color=> {
 			bucket=bucket*3
 			bucket+=color
 		})
-		console.log(bucket)
 		const newMoves = this.state.moves
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
-		this.setState({moves:newMoves, rowColors:this.state.rowColors})
+
+		const newIsRowHidden = this.state.isRowHidden
+		newIsRowHidden[rowId+1] = false
+		this.setState({moves:newMoves, isRowHidden:newIsRowHidden})
 	}
 
 	handleCharClick(rowId, charId) {
 		const newRowColors = this.state.rowColors
 		newRowColors[rowId][charId] = (newRowColors[rowId][charId]+1)%3
-		this.setState({rowColors:newRowColors, moves:this.state.moves})
+		this.setState({rowColors:newRowColors})
 	}
 
 	render() {
@@ -92,12 +82,12 @@ class MainLayout extends React.Component {
 					colors={this.state.rowColors[i]}
 					onNextClick={(rowId)=>this.handleNextClick(rowId)}
 					onCharClick={(rowId,charId) =>this.handleCharClick(rowId, charId)}
+					isHidden={this.state.isRowHidden[i]}
 				/>))
 	}
 }
 
 MainLayout.rootMove = require("./bestresult.json")
-console.log(MainLayout.rootMove.word)
 
 class Instructions extends React.Component {
 	render() {
