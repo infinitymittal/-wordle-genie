@@ -62,6 +62,11 @@ class MainLayout extends React.Component {
 			bucket+=color
 		})
 		const newMoves = this.state.moves
+		const type = typeof newMoves[rowId].bucketToMove
+		console.log(type.toString())
+		if(!(newMoves[rowId].bucketToMove.hasOwnProperty(bucket))) {
+			return
+		}
 		newMoves[rowId+1] = newMoves[rowId].bucketToMove[bucket]
 
 		const newIsRowHidden = this.state.isRowHidden
@@ -101,7 +106,7 @@ class Instructions extends React.Component {
 				<li>Press NEXT to get the next word.</li>
 				<li>Repeat from Step 1 for next word.</li>
 			</ol>
-			You can start again by pressing RESET."
+			You can start again by pressing RESET.
 		</div>
 		)
 	}
