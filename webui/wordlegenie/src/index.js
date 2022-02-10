@@ -94,7 +94,6 @@ class Instructions extends React.Component {
 		return (
 		<div style={{ textAlign: "center", color: "black"}} >
 			This is a Wordle Solver for ALL words.
-			<br/>WIP. Not ready yet!!!!
 			<ol type="1">
 				<li>Enter the word given here in Wordle.</li>
 				<li>Change color of the alphabets below by tapping.</li>
