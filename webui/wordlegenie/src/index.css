@@ -1,7 +1,7 @@
 h1 {
 	color: black;
-	font-size: 32px;
-	margin-bottom: 8px;
+	font-size: 24px;
+	margin-bottom: 4px;
 }
 
 ol {
@@ -11,13 +11,13 @@ ol {
 
 .instructions {
 	text-align: center;
-	margin-bottom: 32px;
+	margin-bottom: 24px;
+	font-size: 16px;
 }
 
 .attempt-row {
 	clear:both;
 	margin-bottom: 8px;
-	text-align: center;
     display: flex;
     justify-content: center;
 }
@@ -27,9 +27,9 @@ ol {
 	border: none;
 	font-family: Cursive;
 	float: left;
-	font-size: 24px;
-	height: 32px;
-	width: 32px;
+	font-size: 20px;
+	height: 28px;
+	width: 28px;
 	margin-right: 4px;
 	line-height: 0;
 }
@@ -38,8 +38,25 @@ ol {
 	border: none;
 	font-family: Cursive;
 	float: left;
-	font-size: 24px;
-	height: 32px;
+	font-size: 20px;
+	height: 28px;
 	width: 96px;
 	background: white;
+}
+
+.reset-button {
+	margin-top: 8px;
+	border-radius: 15px;
+	font-family: Cursive;
+	font-size: 24px;
+	height: 32px;
+	width: 128px;
+	background: tomato;
+	line-height: 0;
+	border-width: 0;
+}
+
+.reset-container {
+	display:flex;
+    justify-content: center;
 }

@@ -48,10 +48,25 @@ class AttemptRow extends React.Component {
 	}
 }
 
+class ResetButton extends React.Component {
+	render() {
+		return (<div className="reset-container">
+					<button className="reset-button" onClick={()=>this.props.onResetClick()}>
+						RESET ⭮
+					</button>	
+				</div>
+				)
+	}
+}
+
 class MainLayout extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {
+		this.state = this.getStartState()
+	}
+	
+	getStartState() {
+		return {
 			rowColors: [...Array(MAX_ATTEMPTS).keys()].map(i=>Array(WORD_LENGTH).fill(0)),
 			moves: [...Array(MAX_ATTEMPTS).keys()].map(i=>MainLayout.rootMove),
 			isRowHidden: [...Array(MAX_ATTEMPTS).keys()].map(i=> i>0)
@@ -85,6 +100,10 @@ class MainLayout extends React.Component {
 		newRowColors[rowId][charId] = (newRowColors[rowId][charId]+1)%3
 		this.setState({rowColors:newRowColors})
 	}
+	
+	handleReset() {
+		this.setState(this.getStartState())
+	}
 
 	render() {
 		return (<div>{
@@ -95,7 +114,9 @@ class MainLayout extends React.Component {
 						onNextClick={(rowId)=>this.handleNextClick(rowId)}
 						onCharClick={(rowId,charId) =>this.handleCharClick(rowId, charId)}
 						isHidden={this.state.isRowHidden[i]}
-					/>)}
+					/>)
+				}
+				<ResetButton onResetClick={()=>this.handleReset()}/>
 				</div>)
 	}
 }
