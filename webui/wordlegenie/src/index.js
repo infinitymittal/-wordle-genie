@@ -8,6 +8,7 @@ toast.configure()
 
 const WORD_LENGTH = 5
 const MAX_ATTEMPTS = 6
+const ALL_GREEN = 242
 
 class CharButton extends React.Component {
 	render() {
@@ -15,7 +16,7 @@ class CharButton extends React.Component {
 			<button className="char-button" 
 				onClick={this.props.onCharClick}
 				style={{background:CharButton.backGroundColors[this.props.color], 
-					color:CharButton.textColors[this.props.color]}}>
+				color:CharButton.textColors[this.props.color]}}>
 			  {this.props.ch}
 			</button>
 		)
@@ -40,7 +41,7 @@ class AttemptRow extends React.Component {
 		<div className="attempt-row">
 			{charButtons}
 			<button className="next-button" onClick={()=>this.props.onNextClick(this.props.rowId)}>
-			  NEXT
+			  NEXT🡺
 			</button>			
 		</div>
 		)
@@ -58,15 +59,15 @@ class MainLayout extends React.Component {
 	}
 	
 	handleNextClick(rowId) {
-		if(rowId>=MAX_ATTEMPTS-1) {
-			toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
-			return
-		}
 		let bucket = 0
 		this.state.rowColors[rowId].forEach(color=> {
 			bucket=bucket*3
 			bucket+=color
 		})
+		if(rowId>=MAX_ATTEMPTS-1 || bucket==242) {
+			toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
+			return
+		}
 		const newMoves = this.state.moves
 		if(!(newMoves[rowId].bucketToMove.hasOwnProperty(bucket))) {
 			toast.error("Your argument is invalid. Check the colors.", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
@@ -86,14 +87,16 @@ class MainLayout extends React.Component {
 	}
 
 	render() {
-		return ([...Array(MAX_ATTEMPTS).keys()].map(i=>
-				<AttemptRow key={i} rowId={i} 
-					move={this.state.moves[i]}
-					colors={this.state.rowColors[i]}
-					onNextClick={(rowId)=>this.handleNextClick(rowId)}
-					onCharClick={(rowId,charId) =>this.handleCharClick(rowId, charId)}
-					isHidden={this.state.isRowHidden[i]}
-				/>))
+		return (<div>{
+					[...Array(MAX_ATTEMPTS).keys()].map(i=>
+					<AttemptRow key={i} rowId={i} 
+						move={this.state.moves[i]}
+						colors={this.state.rowColors[i]}
+						onNextClick={(rowId)=>this.handleNextClick(rowId)}
+						onCharClick={(rowId,charId) =>this.handleCharClick(rowId, charId)}
+						isHidden={this.state.isRowHidden[i]}
+					/>)}
+				</div>)
 	}
 }
 
@@ -102,12 +105,13 @@ MainLayout.rootMove = require("./bestresult.json")
 class Instructions extends React.Component {
 	render() {
 		return (
-		<div style={{ textAlign: "center", color: "black"}} >
+		<div className="instructions">
+			<h1>WORDLE GENIE</h1>
 			This is a Wordle Solver for ALL words.
 			<ol type="1">
 				<li>Enter the word given here in Wordle.</li>
-				<li>Change color of the alphabets below by tapping.</li>
-				<li>Match the colors to those given by Wordle.</li>
+				<li>Tap alphabets to change their color.</li>
+				<li>Match the colors result by Wordle.</li>
 				<li>Press NEXT to get the next word.</li>
 				<li>Repeat from Step 1 for next word.</li>
 			</ol>
@@ -121,7 +125,7 @@ class Instructions extends React.Component {
 ReactDOM.render(
   <React.StrictMode>
 	<div>
-		<Instructions />
+		<Instructions/>
 		<MainLayout/>
 	</div>
   </React.StrictMode>,

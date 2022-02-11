@@ -1,66 +1,45 @@
+h1 {
+	color: black;
+	font-size: 32px;
+	margin-bottom: 8px;
+}
+
+ol {
+	margin-top: 0px;	
+	margin-bottom: 0px;	
+}
+
+.instructions {
+	text-align: center;
+	margin-bottom: 32px;
+}
+
 .attempt-row {
 	clear:both;
+	margin-bottom: 8px;
+	text-align: center;
+    display: flex;
+    justify-content: center;
 }
+
+
 .char-button {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
+	border: none;
+	font-family: Cursive;
+	float: left;
+	font-size: 24px;
+	height: 32px;
+	width: 32px;
+	margin-right: 4px;
+	line-height: 0;
 }
 
 .next-button {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 70px;
-}
-
-
- /* unused*/
-body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-}
-
-ol, ul {
-  padding-left: 30px;
-}
-
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
+	border: none;
+	font-family: Cursive;
+	float: left;
+	font-size: 24px;
+	height: 32px;
+	width: 96px;
+	background: white;
 }
