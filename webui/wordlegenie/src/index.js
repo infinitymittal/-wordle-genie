@@ -79,7 +79,7 @@ class MainLayout extends React.Component {
 			bucket=bucket*3
 			bucket+=color
 		})
-		if(rowId>=MAX_ATTEMPTS-1 || bucket==242) {
+		if(rowId>=MAX_ATTEMPTS-1 || bucket===ALL_GREEN) {
 			toast.success("That's all Folks!", {position: toast.POSITION.TOP_CENTER}, {autoClose:3000})
 			return
 		}
