@@ -41,7 +41,7 @@ class AttemptRow extends React.Component {
 		<div className="attempt-row">
 			{charButtons}
 			<button className="next-button" onClick={()=>this.props.onNextClick(this.props.rowId)}>
-			  NEXT🡺
+			  NEXT➜
 			</button>			
 		</div>
 		)
@@ -52,7 +52,7 @@ class ResetButton extends React.Component {
 	render() {
 		return (<div className="reset-container">
 					<button className="reset-button" onClick={()=>this.props.onResetClick()}>
-						RESET ⭮
+						RESET↻
 					</button>	
 				</div>
 				)
